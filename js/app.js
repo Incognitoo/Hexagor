@@ -378,7 +378,7 @@ function checkAutoFill()
 // Drawing
 // ########
 
-function drawHex(center, size, lineWidth, fillStyle = '#fff', strokeStyle = '#fff')
+function drawHex(center, size, lineWidth, fillStyle = '#fff', strokeStyle = '#fff', shadowColor='#000')
 {
 	ctx.save();
 	var points = getHexPoints(center, size);
@@ -392,10 +392,10 @@ function drawHex(center, size, lineWidth, fillStyle = '#fff', strokeStyle = '#ff
 
 	ctx.clip();
 
-	ctx.shadowColor = '#000';
+	ctx.shadowColor = shadowColor;
 	ctx.shadowOffsetX = -(0.05 * size);
 	ctx.shadowOffsetY = -(0.05 * size);
-	ctx.shadowBlur = 20;
+	ctx.shadowBlur = 14;
 
 	ctx.fillStyle = fillStyle;
 	ctx.fill();
@@ -465,9 +465,9 @@ function drawLoader(center, size, deg = 0, fillStyle = '#aa3333', strokeStyle = 
 function drawMountain(center, size, fillStyle = '#303030')
 {
 	var width = size;
-	var extraWidthLeft = 0.05 * size;
-	var heightRight =  0.8 * size;
-	var heightLeft = size;
+	var extraWidthLeft = 0.1 * size;
+	var heightRight =  0.65 * size;
+	var heightLeft = 0.95 * size;
 
 	var posX = center.x - (width / 2);
 	var posY = center.y + heightLeft/2-2;
@@ -509,10 +509,10 @@ function drawTree(center, size, color = '#303030')
 {
 	var posX = center.x;
 	var posY = center.y;
-	var trunkWidth = .08 * size;
-	var trunkHeight = .2 * size;
-	var treeHeight = .8 * size;
-	var treeWidth = .5 * size;
+	var trunkWidth = 0.08 * size;
+	var trunkHeight = 0.2 * size;
+	var treeHeight = 0.8 * size;
+	var treeWidth = 0.5 * size;
 	// Trunk
 	ctx.beginPath();
 	ctx.moveTo(posX , posY + trunkHeight/2);
@@ -544,15 +544,15 @@ function drawTree(center, size, color = '#303030')
 function drawTrees(center, size, color = '#303030')
 {
 	drawTree(center, size, color);
-    drawTree(new Point(center.x - .4*size, center.y + .45*size), size, color);
-    drawTree(new Point(center.x + .4*size, center.y + .45*size), size, color);
+    drawTree(new Point(center.x - 0.4*size, center.y + 0.45*size), size, color);
+    drawTree(new Point(center.x + 0.4*size, center.y + 0.45*size), size, color);
 }
 
 function drawWave(center, size, color = '#303030')
 {
-	var waves = 11;
-	var waveHeight = .1*size;
-	var waveDist = .1*size;
+	var waves = 9;
+	var waveHeight = 0.1*size;
+	var waveDist = 0.1*size;
 
 	var posX = center.x - (waves * waveDist / 2);
 	var posY = center.y;
@@ -563,26 +563,26 @@ function drawWave(center, size, color = '#303030')
 		ctx.lineTo(posX + i * waveDist, (i % 2 ? posY - waveHeight : posY));
 	}
 	ctx.strokeStyle = color;
-	ctx.lineWidth = .05*size;
+	ctx.lineWidth = 0.05*size;
 	ctx.stroke();
 }
 
 function drawWaves(center, size, color = '#303030')
 {
-	drawWave(new Point(center.x, center.y + .05*size), size, color);
-	drawWave(new Point(center.x, center.y + .05*size - .25*size), size, color);
-	drawWave(new Point(center.x, center.y + .05*size + .25*size), size, color);
+	drawWave(new Point(center.x + 0.05 * size, center.y + 0.05 * size), size, color);
+	drawWave(new Point(center.x - 0.10 * size, center.y + 0.05 * size - 0.25 * size), size, color);
+	drawWave(new Point(center.x - 0.10 * size, center.y + 0.05 * size + 0.25 * size), size, color);
 }
 
 function drawCamp(center, size, color = '#303030')
 {
-	var posX = center.x + size * .08;
-	var posY = center.y + size * .27;
+	var posX = center.x + size * 0.08;
+	var posY = center.y + size * 0.27;
 
-	var campHeight = size * .7;
-	var woodStickWidth = size * .1;
-	var woodStickIncl = size * .3;
-	var dist = size * .2;
+	var campHeight = size * 0.7;
+	var woodStickWidth = size * 0.1;
+	var woodStickIncl = size * 0.3;
+	var dist = size * 0.2;
 
 	ctx.beginPath();
 	ctx.moveTo(posX - dist - woodStickWidth, posY);
@@ -734,7 +734,7 @@ function drawGrid(center, size, grid)
 				let point = new Point(posX, posY);
 
 				if(grid[x][y].type == TYPE_WATER) {
-					drawHex(point, size, borderSize, '#74b9ff');
+					drawHex(point, size, borderSize, '#74b9ff','#fff','#74b9ff');
 					drawWaves(point, size, LighenDarkenColor('#74b9ff', -75))
 				} else {
 					var hexStyle = '#ffffff';
@@ -743,7 +743,7 @@ function drawGrid(center, size, grid)
 						hexStyle = grid[x][y].player.color;
 						elemStyle = '#ffffff';
 					}
-					drawHex(point, size, borderSize, hexStyle);
+					drawHex(point, size, borderSize, hexStyle,'#fff','#000');
 					if(grid[x][y].type == TYPE_HEADQUARTER) {
 						drawStar(point, size * .8);
 					} else if(grid[x][y].type == TYPE_MOUNTAIN) {
